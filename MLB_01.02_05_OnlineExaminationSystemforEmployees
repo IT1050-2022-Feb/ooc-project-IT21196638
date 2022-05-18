@@ -1,0 +1,703 @@
+#include <iostream> 
+#include <cstring> 
+using namespace std; 
+#define FSIZE 3
+#define ESIZE 3
+#define RSIZE 5
+#define SIZE 30
+class Feedback; 
+class Payment;
+class Question;
+class Answer;
+class Resource;
+class Exam;
+
+// UnregisteredEmployee.h
+class UnregisteredEmployee
+ {
+    protected:
+        char name[30];
+        char email[30];
+        int contactNO;
+
+    public:
+        UnregisteredEmployee();
+        UnregisteredEmployee(const char eName[], const char eEmail[], int eContactNo);
+        void displayUserDetails();
+        void updateUserDetails();
+        ~UnregisteredEmployee();
+  };
+
+
+
+
+
+//RegisteredEmployee.h
+class RegisteredEmployee : public UnregisteredEmployee
+ {
+    protected:
+        int empID;
+        string address;
+        char NIC[10];
+        Feedback*fb[FSIZE];
+    public:
+        RegisteredEmployee();
+        RegisteredEmployee(const char eName[],int rEmpID,const char rENIC[], const char eEmail[], int eContactNo, string rAddress);
+        char getName();
+        char getEmail();
+        char getContactNo();
+        void displayUserDetails();
+        void updateUserDetails();
+        ~RegisteredEmployee();
+ };
+ 
+//Administrator.h
+class Administrator
+ {
+    private:
+        int adminID;
+        string adminName;
+        int adminContactNo;
+        string adminEmail;
+        Feedback *fb[FSIZE];
+        Resource *RE[RSIZE];
+        
+    public:
+        Administrator();
+        Administrator(int aID,string aName,int aContactNo , string aEmail); 
+        void displayAdminDetails();
+        void manageFeedback(Feedback *fb1);
+        void manageResource(Resource *RE1); 
+        ~Administrator();
+ }; 
+ 
+//Examiner.h
+class Examiner
+ {
+    private:
+        int ExaminerID;
+        string Name;
+        string Address;
+        string ContactNo;
+        double Salary;
+    
+    public:
+        Examiner();
+        Examiner(int exaID, string exaName, string exaAddress, string exaContactNo, double exaSalary);
+        void displayExaminerDetails();
+        double getsalary();
+        void updateExaminerDetails();
+        ~Examiner();
+ };
+ 
+//Enrollment.h
+class Enrollment
+{
+    private:
+        RegisteredEmployee *emp;
+        Exam *exam;
+        double marks;
+        Payment *pmnt;
+        
+            
+    public:
+        Enrollment();       
+        Enrollment(RegisteredEmployee *em, Exam *ex);
+        void addPayment(Payment *p);        
+        void addMarks(double m);        
+        double getMarks();      
+        void deleteMarks();     
+        void displayEnrollment();           
+        ~Enrollment();      
+};
+
+ //Payment.h
+class Payment
+ {
+    private:    
+        int payID;
+        string payType;
+        int amount;
+        string date;
+        Enrollment *enrl;
+            
+    public :
+        Payment();
+        Payment(int id,string type, int amo,string dt, Enrollment *en); 
+        void displayPayment();
+        void updatePayment();
+        ~Payment();
+ };
+ 
+ //Question.h
+class Question
+{
+    private:
+        int questionNo;
+        string qDes;
+        Answer *ans;
+    
+    
+    public:
+        Question ();
+        Question (int qNo, string des); 
+        void addAnswer(Answer *a);      
+        void displayQuestion();
+        void displayQandA();
+        ~Question ();   
+};
+ 
+ 
+ //Exam.h
+class Exam
+ {
+    private:
+        int examID;
+        string examName;
+        double examFee;
+        Question * ques[SIZE];
+        
+    public:
+        Exam ();        
+        Exam (int exNo, string exName, double exFee, Question *q1, Question *q2);       
+        void displayExamDetails();      
+        void DisplayQuestion ();
+        void displayExamQandA();                        
+        ~Exam();
+};
+
+ //Answer.h
+class Answer
+{
+    private:        
+        int answerID;
+        string answerDes;
+        Question *q;
+    
+    public:
+        Answer();       
+        Answer( int aID, string aDes);      
+        void addQuestion(Question *q1);     
+        void printAnswer();
+        void displayAnswer();
+        ~Answer();
+};
+
+//Resource.h
+class Resource
+ {
+    protected:
+        int  ResourceID;
+        string ResourceName;
+        string ResourceType;
+        string ResourceLink;
+
+    public:
+        Resource();
+        Resource(int RID, string RName, string RType, string RLink);
+        void addResource();
+        void displayResource();
+        void manageResource(Resource *RE1);
+        ~Resource();
+ };
+ 
+//Report.h
+class Report
+ {
+    private:
+       int reportID;
+       string reportName;
+       string reportDate;
+       
+    public:
+        Report();
+        Report(int rID, string rName, string rDate);
+        void addAdmin(Administrator *A1);
+        void displayReport();
+        ~Report();  
+ };
+
+ //Feedback.h
+class Feedback
+ {
+    private:
+        int FeedbackID;
+        char Email;
+        
+        string message;
+        string FeedbackMsg;
+        Administrator *admin; 
+        RegisteredEmployee *user;
+    
+    public:
+        Feedback();
+        Feedback(string pMessage); 
+        string getMessage();
+        void manageFeedback(Administrator *a); 
+        void displayFeedbackDetails();  
+ };
+
+
+// methods implemetation
+
+//UnregisteredEmployee.cpp
+UnregisteredEmployee::UnregisteredEmployee()
+{   
+}
+
+UnregisteredEmployee::UnregisteredEmployee(const char eName[], const char eEmail[], int eContactNo)
+{
+    strcpy(name, eName);
+    strcpy(email, eEmail);
+    contactNO = eContactNo;
+}
+
+void UnregisteredEmployee::displayUserDetails()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~UnregisteredEmployee~~~~~~~~~~~~" << endl;
+    cout<< "Employee Name: " << name <<endl;
+    cout<< "Employee Email: " << email <<endl;
+    cout<< "Employee Contact No: " << contactNO <<endl; 
+}
+
+void UnregisteredEmployee::updateUserDetails()
+{   
+}
+
+UnregisteredEmployee::~UnregisteredEmployee()
+{   
+}
+
+//RegisteredEmployee.cpp
+RegisteredEmployee::RegisteredEmployee()
+{   
+}
+
+RegisteredEmployee::RegisteredEmployee(const char eName[],int rEmpID,const char rENIC[], const char eEmail[], int eContactNo, string rAddress)
+{
+    strcpy(name, eName);
+    empID = rEmpID;
+    address =rAddress;
+    strcpy(NIC, rENIC);
+}
+
+char RegisteredEmployee::getName()
+{   
+}
+
+char RegisteredEmployee::getEmail()
+{   
+}
+
+char RegisteredEmployee::getContactNo()
+{   
+}
+
+void RegisteredEmployee::displayUserDetails()
+{   cout << endl;
+    cout << "~~~~~~~~~~~~RegisteredEmployee~~~~~~~~~~~" << endl;
+    cout<< "Employee Name: " << name <<endl;
+    cout<< "Employee ID: " << empID <<endl;
+    cout<< "Employee Email: " << email <<endl;
+    cout<< "Employee NIC: " << NIC <<endl;
+    cout<< "Employee Contact No: " << contactNO <<endl;
+    cout<< "Employee Address: " << address <<endl;
+}
+
+void RegisteredEmployee::updateUserDetails()
+{   
+}
+
+RegisteredEmployee::~RegisteredEmployee()
+{
+}
+
+//Administrator.cpp
+Administrator::Administrator(int aID,string aName,int aContactNo , string aEmail)
+{
+    adminID = aID;
+    adminName = aName;
+    adminContactNo = aContactNo;
+    adminEmail = aEmail;
+}   
+void Administrator::displayAdminDetails()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~Administrator~~~~~~~~~~~~" << endl;
+    cout << " Admin ID =" << adminID << endl;
+    cout << " Admin Name =" << adminName << endl;
+    cout << " Admin Contact Number = " << adminContactNo << endl;
+    cout << " Admin Email = " << adminEmail << endl;
+}
+void Administrator::manageFeedback(Feedback *fb1)
+{   
+}
+
+void Administrator::manageResource(Resource *RE1)
+{   
+}
+
+//Examiner.cpp
+Examiner::Examiner()
+ {
+    ExaminerID=0;
+    Name="";
+    Address="";
+    ContactNo="";
+    Salary=0;
+ }
+ 
+Examiner::Examiner(int exaID, string exaName, string exaAddress, string exaContactNo, double exaSalary)
+ {
+    ExaminerID=exaID;
+    Name=exaName;
+    Address=exaAddress;
+    ContactNo=exaContactNo;
+    Salary=exaSalary;
+ }
+ 
+void Examiner::displayExaminerDetails()
+ {
+    cout << endl;
+    cout << "~~~~~~~~~~~~Examiner~~~~~~~~~~~~" << endl; cout << "ID : " << ExaminerID << endl;
+    cout << "Name : " << Name << endl; cout << "Address : " << Address << endl;
+    cout << "Contact NO : " << ContactNo << endl; cout << "Salray : " << Salary << endl;
+    cout << endl;
+ }
+ 
+double Examiner::getsalary()
+ {
+    return Salary;
+ }
+ 
+void Examiner::updateExaminerDetails()
+ {
+    cout << "Enter new contact number : "; 
+    cin >> ContactNo;
+    cout << "Enter new salary : "; 
+    cin >> Salary;
+ }
+ 
+Examiner::~Examiner()
+ {
+    cout << "Examiner object " << ExaminerID << " Deleted " << endl;;
+ }
+ 
+ 
+ //Enrollment.cpp
+ Enrollment::Enrollment()
+{
+    marks = 0;
+}
+        
+Enrollment::Enrollment(RegisteredEmployee *em, Exam *ex)
+{
+    emp = em;
+    exam = ex;
+    marks = 0;  
+}
+
+void Enrollment::addPayment(Payment *p)
+{
+    pmnt = p;
+}
+        
+void Enrollment::addMarks(double m)
+{
+    if ((m < 100) && ( m > 0)){
+        marks = m;
+    }   
+}
+        
+double Enrollment::getMarks(){
+    return marks;
+}
+        
+void Enrollment::deleteMarks(){
+    marks = 0;
+}
+        
+void Enrollment::displayEnrollment()
+{   
+}   
+        
+Enrollment::~Enrollment()
+{
+}
+
+//Payment.cpp
+Payment::Payment()
+{
+        payID = 0;
+        payType = "";
+        amount = 0;
+        date = "";  
+}
+
+Payment::Payment(int id,string type, int amo,string dt, Enrollment *en)
+{
+    payID = id;
+    payType=type;
+    amount = amo;
+    date=dt;
+    enrl = en;  
+};
+
+void Payment::displayPayment()
+{
+        cout << endl;
+        cout << "~~~~~~~~~~~~Payment~~~~~~~~~~~" << endl;
+        cout << " Payment ID =" << payID << endl;
+        cout << " Payment Type =" << payType << endl;
+        cout << " Payment Amount = " << amount << endl;
+        cout << " Payment Date = " << date << endl; 
+}
+
+void Payment::updatePayment()
+{   
+}
+
+//Question.cpp
+ Question::Question (int qNo, string des)
+{
+    questionNo = qNo;
+    qDes = des; 
+};
+        
+void Question::addAnswer(Answer *a)
+{
+    ans = a;
+}
+
+void Question::displayQuestion()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~Question~~~~~~~~~~~~";
+    cout<<endl<<"Question No : "<< questionNo << endl; cout<<"Question : "<<qDes<<endl;
+}
+
+void Question::displayQandA()
+{
+    cout<< questionNo << ". "<<qDes<<endl;
+    ans->printAnswer(); 
+    cout<<endl;
+}
+
+Question::~Question()
+{
+cout<<"Deleting Question "<<questionNo<<endl;
+}
+
+//Exam.cpp
+Exam::Exam () 
+{
+    examID = 0;
+    examName = "";
+    examFee = 0;
+    ques [0] = new Question(0, "");
+    ques [1] = new Question(0, "");
+}
+        
+Exam::Exam (int exNo, string exName, double exFee, Question *q1, Question *q2)
+{
+    examID = exNo;
+    examName = exName;
+    examFee = exFee;
+    ques [0] = q1;
+    ques [1] = q2;
+}
+        
+void Exam::displayExamDetails()
+{
+    cout << endl;
+    cout<< endl;
+    cout << "~~~~~~~~~~~~Exam Details~~~~~~~~~~~~" << endl;
+    cout<<"Exam ID : "<<examID<<endl<<"Exam Name : "<<examName<<endl<<"Exam Fee : "<<examFee<<endl;
+}
+        
+void Exam::DisplayQuestion ()
+{
+    for (int i=0; i<SIZE; i++){
+        ques[i]->displayQuestion();
+    }       
+}
+void Exam::displayExamQandA()
+{
+    for (int i=0; i<SIZE; i++){
+        ques[i]->displayQandA();
+        cout<<endl;
+    }
+}
+                        
+Exam::~Exam()
+{
+    cout<< "Deleting Exam "<<endl;  
+    for (int i=0; i<SIZE; i++){
+        delete ques[i];
+    }   
+}
+ 
+//Answer.cpp
+Answer::Answer()
+{
+    answerID = 0;
+    answerDes = "";
+}   
+Answer::Answer( int aID, string aDes)
+{
+    answerID = aID;
+    answerDes = aDes;
+}
+void Answer::addQuestion(Question *q1)
+{
+    q = q1;
+}
+void Answer::printAnswer()
+{
+cout<<"Answer : "<<answerDes;
+}
+void Answer::displayAnswer()
+{
+cout << endl;
+cout << "~~~~~~~~~~~~Answer~~~~~~~~~~~~" ;
+cout<<endl<<"Answer No: "<<answerID<< endl; cout<<"Answer : "<<answerDes;
+}
+
+//Resource.cpp
+ Resource::Resource()
+ {
+    ResourceID=0;
+    ResourceName="";
+    ResourceType="";
+    ResourceLink="";
+ }
+ 
+ Resource::Resource(int RID, string RName, string RType, string RLink)
+ {
+    ResourceID=RID;
+    ResourceName=RName;
+    ResourceType=RType;
+    ResourceLink=RLink;
+ }
+ 
+void Resource::displayResource()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~Resource~~~~~~~~~~~~" << endl;
+    cout << " Resource ID =" << ResourceID << endl;
+    cout << " Resource Name =" << ResourceName << endl;
+    cout << " Resource Type = " << ResourceType << endl;
+    cout << " Resource Link = " << ResourceLink << endl;
+}
+
+void manageResource(Resource *RE1)
+{   
+}
+
+void addResource()
+{
+}
+
+//Feedback.cpp
+Feedback::Feedback()
+{
+message = "";
+}
+
+Feedback::Feedback(string pMessage)
+{
+message = pMessage;
+}
+
+string Feedback::getMessage()
+{
+return FeedbackMsg;
+}
+
+void Feedback::manageFeedback(Administrator *a )
+{
+}
+
+void Feedback::displayFeedbackDetails()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~Feedback's Details~~~~~~~~~~~" << endl;; cout << "Message : " << message ;
+    cout << endl;
+}
+
+//Report.cpp
+Report::Report(int rID, string rName, string rDate)
+{
+    reportID = rID;
+    reportName = rName;
+    reportDate = rDate;
+}
+    
+void Report::addAdmin(Administrator *A1)
+{
+     A1->displayAdminDetails();
+}
+    
+void Report::displayReport()
+{
+    cout << endl;
+    cout << "~~~~~~~~~~~~Report~~~~~~~~~~~~" << endl;
+    cout << " Report ID =" << reportID << endl;
+    cout << " Report Name =" << reportName << endl;
+    cout << " Report Date = " << reportDate << endl;
+}
+
+
+
+int main(){
+    
+    Question *ques1, *ques2;
+    Answer *answ1, *answ2;
+    Exam *ex1;
+    
+    UnregisteredEmployee *UnE1=new UnregisteredEmployee("Bawantha Gamage", "bawantha12@gmail.com", 715869524);
+    UnE1->displayUserDetails();
+    
+    RegisteredEmployee *RegE1=new RegisteredEmployee("Sachin Liyanage ",55,"2001258967V", "sachin04@gmail.com", 7158963245, "172/67C,katuwana,Homagama");
+    RegE1->displayUserDetails(); 
+    
+    Administrator *A1 = new Administrator( 0001,"Mr.George",776832928,"mrgeorge101@gmail.com");
+    Report *R1 = new Report(552, "GeorgeFile","2022.10.3");
+    R1->addAdmin(A1);
+    
+    ex1 = new Exam(125, "RHCSA", 15000, ques1, ques2);
+
+    Examiner *exa1 =new Examiner(458,"Namal Kulasuirya","257/5,Navinna,Maharagama","0715896475",450000);
+    exa1->displayExaminerDetails();  
+    exa1->displayExaminerDetails();
+    
+    Enrollment *En1=new Enrollment(RegE1,ex1);
+    Payment *p1=new Payment(587,"PayPal",15000,"2021/05/08",En1);
+    p1->displayPayment();
+    
+    ques1 = new Question(1, "The project manager reviews projects with the team. in that case what exercise is the team involved in?");
+    ques2 = new Question(2, "Explain a part of the Group creativity technique?");
+    ques1->addAnswer(answ1);
+    ques2->addAnswer(answ2);
+    ques1->displayQuestion();
+    ques2->displayQuestion();
+    
+        
+    answ1 = new Answer(1, "Risk identification");
+    answ2 = new Answer(2, "Brainstorming");
+    answ1->addQuestion(ques1);
+    answ2->addQuestion(ques2);
+    answ1->displayAnswer();
+    answ2->displayAnswer();
+    
+    ex1->displayExamDetails();
+    R1->displayReport();
+    
+    Resource *RE1=new Resource(2335,"Database Design", "Online Tutorial", "https://youtu.be/ztHopE5Wnpc");
+    RE1->displayResource();
+    
+    
+    Feedback*fb1=new Feedback("Execellent Exam");
+    fb1->displayFeedbackDetails();
+}
